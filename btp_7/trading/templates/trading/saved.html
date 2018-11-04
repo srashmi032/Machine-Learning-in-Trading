@@ -1,0 +1,74 @@
+
+
+{% load static from staticfiles %}
+<html>
+<style type="text/css">
+body {
+    background-image: url("{% static  'b4.jpeg' %}");
+    
+}
+p.one
+{
+width: 100px; height: 50px;
+border-style: solid;
+
+}
+tr.row{width:100%;height:50px;}
+
+.column {
+    
+   float: left;
+    padding: 20px;
+}
+td{
+  color:#ffffff;
+}
+
+/* Clearfix (clear floats) */
+.row {
+    padding: 20px;
+}
+.center{
+  color:#ffffff;
+}
+</style>
+   <body>
+     
+      
+<p class="center">
+      
+      {% if saved %}
+         <strong>Target Price is: {{ label }}</strong>
+      {% endif %}
+      
+      {% if not saved %}
+         <strong>Target Price can't be predicted</strong>
+      {% endif %}
+</p>
+      <br/>
+      <br/>
+
+      <table>
+
+      <tr><td><img src="{% static  'LinearRegression.png' %} " alt="My image" style="width:400px;height:400px;"/></td>
+      <td><img src="{% static  'lasso_regression.png' %} " alt="My image" style="width:400px;height:400px;"/></td>
+      <td><img src="{% static  'Poly_regression.png' %} " alt="My image" style="width:400px;height:400px;"/></td></tr>
+
+      <tr><td> Linear Regression</td>
+          <td>Lasso Regression</td>
+          <td>Polynomial Regression</td></tr>
+
+      </table>
+      
+      
+      
+
+    
+      
+   
+
+  
+      
+
+   </body>
+</html>

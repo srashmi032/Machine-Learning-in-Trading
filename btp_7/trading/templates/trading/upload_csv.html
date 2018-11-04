@@ -1,0 +1,66 @@
+
+{% load static from staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<style type="text/css">
+body {
+    
+    background-image: url("{% static  'b3.jpeg' %}");
+
+}
+form{
+  background-color:hsla(0, 0%, 94%, 0.2);
+  width: 45%;
+  margin-top: 20%;
+  margin-bottom: 25%;
+  margin-left:25%;
+  margin-right: 25%;
+  
+}
+.center{text-align: center;
+color:#ffffff;}
+input[type=file] {
+    border: 3px solid #ffffff;
+    
+}
+.button4 {border-radius: 12px;}
+</style>
+   <body>
+   
+      <h1 class="center">TRAIN MOST OPTIMAL MACHINE LEARNING MODEL FOR YOUR TASK</h1>
+      <form  name = "form" enctype = "multipart/form-data" 
+         action = "{% url "showcsv" %}" method = "POST" >{% csrf_token %}
+         
+         <div style = "max-width:470px;">
+            <center>  
+               
+            </center>
+         </div>
+			
+         <br>
+         
+         <div style = "max-width:470px;">
+            <center> 
+               <input type = "file" style = "margin-left:20%;" 
+                  placeholder = "csv" name = "csv" />
+            </center>
+         </div>
+			
+         <br>
+         
+         <div style = "max-width:470px;">
+            <center> 
+            
+               <button class="button button4" style = "border:0px;background-color:#4285F4; margin-top:8%; 
+                  height:35px; width:80%; margin-left:19%;" type = "submit" value = "Upload" >
+                  <strong>TRAIN</strong>
+               </button>
+               
+            </center>
+         </div>
+         
+      </form>
+      
+   </body>
+</html>
