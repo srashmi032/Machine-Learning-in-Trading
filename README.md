@@ -7,6 +7,8 @@ Then the trained model can be used to predice target value for given input featu
 Specfic feature-This web application can be used for any kind of application like chemical problem,trading problem etc.
 Here I have taken trading problem to train my model to predict future price of stock data.
 Various ML models are trained for input application file and then the one with maximum accuracy is chosen to perform the task.
+
+
 Technology used:
 1.Django Framework
 2.Python libraries-pandas,matplotlib,pyplot
