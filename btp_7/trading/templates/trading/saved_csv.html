@@ -97,23 +97,16 @@ color:#ffffff;}
          action = "{% url "predictupload" %}" method = "POST">{% csrf_token %}
     <div class="row">
       <div class="col-25">
-        <label for="fname">Adjusted Open Price</label>
+        <label for="fname"> Open Price</label>
       </div>
       <div class="col-75">
         <input type="number" step="any" id="fname" name="Adjusted Open Price" placeholder="Open..">
       </div>
     </div>
+    
     <div class="row">
       <div class="col-25">
-        <label for="fname">Moving Average</label>
-      </div>
-      <div class="col-75">
-        <input type="number" step="any"  id="fname" name="Moving Average" placeholder="Mov Avg..">
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-25">
-        <label for="fname">Adjusted High Price</label>
+        <label for="fname">High Price</label>
       </div>
       <div class="col-75">
         <input type="number" step="any" id="fname" name="Adjusted High Price" placeholder="High..">
@@ -121,7 +114,7 @@ color:#ffffff;}
     </div>
     <div class="row">
       <div class="col-25">
-        <label for="fname">Adjusted Low Price</label>
+        <label for="fname">Low Price</label>
       </div>
       <div class="col-75">
         <input type="number" step="any" id="fname" name="Adjusted Low Price" placeholder="Low..">
@@ -145,7 +138,7 @@ color:#ffffff;}
     </div>
     <div class="row">
       <div class="col-25">
-        <label for="fname">Adjusted Volume</label>
+        <label for="fname">Volume</label>
       </div>
       <div class="col-75">
         <input type="number" step="any" id="fname" name="Adjusted Volume" placeholder="Volume..">
@@ -167,7 +160,14 @@ color:#ffffff;}
         <input type="number" step="any" id="lname" name="Execution_time" placeholder="runtime..">
       </div>
     </div>
-    
+    <div class="row">
+      <div class="col-25">
+        <label for="fname">Moving Average</label>
+      </div>
+      <div class="col-75">
+        <input type="number" step="any"  id="fname" name="Moving Average" placeholder="Mov Avg..">
+      </div>
+    </div>
     
     <div class="row">
       <input type="submit" value="PREDICT">
