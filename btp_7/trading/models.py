@@ -10,7 +10,7 @@ class Adj_close(models.Model):
 	pct_change=models.FloatField(max_length=20)
 	adj_vol=models.FloatField(max_length=20)
 	avg=models.FloatField(max_length=20)
-	runtime=models.FloatField(max_length=20)
+	#runtime=models.FloatField(max_length=20)
 
 class Document(models.Model):
     description = models.CharField(max_length=255, blank=True)
