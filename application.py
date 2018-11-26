@@ -19,36 +19,49 @@ from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import Ridge
 from sklearn import utils
 from sklearn.linear_model import Lasso
+from sklearn.model_selection import train_test_split
 #import Image
 import pickle
 
-def main():
+from sklearn.model_selection import KFold
+from sklearn.model_selection import cross_val_score
+
+from sklearn.metrics import mean_squared_error
+from math import sqrt
+
+
+
+def stock():
 	st=time.time()
 	style.use('ggplot')
 
 	#df = quandl.get("WIKI/GOOGL")
-	names =['Date','Adj. Open',  'Adj. High',  'Adj. Low',  'Adj. Close', 'Adj. Volume']
+	names =['Date','Open',  'High',  'Low', 'Close', 'Adj. Close', 'Volume']
 	dataset = pandas.read_csv('/Users/rashmisahu/Desktop/rashmi/sem_7/btp_sem7/tatasteel.csv',names=names)
 	df=pandas.DataFrame(dataset)
-	df = df[['Adj. Open',  'Adj. High',  'Adj. Low',  'Adj. Close', 'Adj. Volume']]
-	df['HL_PCT'] = (df['Adj. High'] - df['Adj. Low']) / df['Adj. Close'] * 100.0
-	df['PCT_change'] = (df['Adj. Close'] - df['Adj. Open']) / df['Adj. Open'] * 100.0
+	df = df[['Open',  'High',  'Low', 'Close', 'Adj. Close', 'Volume']]
+	print (df)
+	#df.drop_duplicates(inplace=True)
+	df['HL_PCT'] = (df['High'] - df['Low']) / df['Adj. Close'] * 100.0
+	df['PCT_change'] = (df['Adj. Close'] - df['Open']) / df['Open'] * 100.0
 
-	df = df[['Adj. High',  'Adj. Low','Adj. Close', 'HL_PCT', 'PCT_change', 'Adj. Volume']]
+	df = df[[ 'Open',  'High',  'Low','Close','Adj. Close', 'HL_PCT', 'PCT_change', 'Volume']]
 	forecast_col = 'Adj. Close'
 	df.fillna(value=-99999, inplace=True)
 	forecast_out = int(math.ceil(0.01 * len(df)))
 	df['label'] = df[forecast_col].shift(-forecast_out)
+	df['monthly_return']=(df['Adj. Close'].shift(-1)-df['Adj. Close'])/df['Adj. Close']
 
 
 	df['Avg']=pandas.Series(np.random.randn(dataset['Adj. Close'].count()), index=df.index)
 	df['execution_time']=pandas.Series(np.random.randn(dataset['Adj. Close'].count()), index=df.index)
 	df['Moving Avg']=pandas.Series(np.random.randn(dataset['Adj. Close'].count()), index=df.index)
-
+	df['CH_avg']=pandas.Series(np.random.randn(dataset['Adj. Close'].count()), index=df.index)
 	for index,row in df.iterrows():
 		start = time.time()
-		row['Avg']=row[['Adj. Open', 'Adj. Close']].mean()
-		row['Moving Avg']=row[['Adj. High', 'Adj. Low']].mean()
+		row['Avg']=row[['Open', 'Adj. Close']].mean()
+		row['Moving Avg']=row[['High', 'Low']].mean()
+		row['CH_avg']=row[['Close', 'High']].mean()
 		#print (row['Avg'])
 		df['Avg'][index]=row['Avg']
 		df['Moving Avg'][index]=row['Moving Avg']
@@ -66,8 +79,11 @@ def main():
 	#df.drop(['Adj. Close'])
 	#print (df['Adj. Close'])
 	df=df.drop(['Adj. Close'],1)
+	df=df.drop(['monthly_return'],1)
+	df=df.drop(['CH_avg'],1)
+	print (df)
 	X = np.array(df.drop(['label'], 1))
-	X = preprocessing.scale(X)
+	#X = preprocessing.scale(X)
 	X_lately = X[-forecast_out:]
 	X = X[:-forecast_out]
 
@@ -92,13 +108,23 @@ def main():
 	confidence = clf.score(X_test, y_test)
 
 	print (confidence)
+	
+
+	
+	
 
 	prediction=clf.predict(X_test)
 
 	print(prediction)
 	#pyplot.scatter(X_test, y_test)
 	
-	plt.scatter(X_test[:,1],prediction)
+	rms = sqrt(mean_squared_error(y_test, prediction))
+	print ("rms")
+	print (rms)
+
+	plt.scatter(X_test[:,9],prediction)
+	#par = np.polyfit(X_test[:,9],prediction, 1, full=True)
+	#plt.plot(X_test[:,9],par)
 	#plt.plot(X_test,prediction)
 	plt.show()
 	plt.plot(y_test)
@@ -136,7 +162,11 @@ def main():
 	print (confidence)
 	prediction= clf.predict(X_test_new)
 
-	plt.scatter(X_test[:,1],prediction)
+	plt.scatter(X_test[:,9],prediction)
+
+	rms = sqrt(mean_squared_error(y_test, prediction))
+	print ("rms")
+	print (rms)
 	#plt.plot(X_test,prediction)
 	plt.show()
 	print(prediction)
@@ -181,7 +211,12 @@ def main():
 
 	print(prediction)
 	#pyplot.scatter(X_test, y_test)
-	plt.scatter(X_test[:,1],prediction)
+	plt.scatter(X_test[:,9],prediction)
+
+	rms = sqrt(mean_squared_error(y_test, prediction))
+	print ("rms")
+	print (rms)
+
 	plt.show()
 	plt.plot(y_test)
 	plt.plot(prediction)
@@ -201,11 +236,19 @@ def main():
 
 	print(prediction)
 	#pyplot.scatter(X_test, y_test)
-	plt.scatter(X_test[:,1],prediction)
+	plt.scatter(X_test[:,9],prediction)
+
+
+	rms = sqrt(mean_squared_error(y_test, prediction))
+	print ("rms")
+	print (rms)
+
+	plt.savefig('Svc.png')
 	plt.show()
 
 	plt.plot(y_test)
 	plt.plot(prediction)
+	plt.savefig('Svc.png')
 	plt.show()
 
 	print("KNN")
@@ -221,7 +264,12 @@ def main():
 
 	print(prediction)
 	#pyplot.scatter(X_test, y_test)
-	plt.scatter(X_test[:,1],prediction)
+	plt.scatter(X_test[:,9],prediction)
+
+	rms = sqrt(mean_squared_error(y_test, prediction))
+	print ("rms")
+	print (rms)
+
 	plt.show()
 	plt.plot(y_test)
 	plt.plot(prediction)
@@ -232,7 +280,7 @@ def main():
 
 	print("Ridge Regression:")
 
-	clf = Ridge(alpha=1.0)
+	clf = Ridge(alpha=0.5)
 	clf.fit(X_train,y_train)
 	confidence = clf.score(X_test, y_test)
 
@@ -242,7 +290,12 @@ def main():
 
 	print(prediction)
 	#pyplot.scatter(X_test, y_test)
-	plt.scatter(X_test[:,1],prediction)
+	plt.scatter(X_test[:,9],prediction)
+
+	rms = sqrt(mean_squared_error(y_test, prediction))
+	print ("rms")
+	print (rms)
+
 	#plt.plot(X_test,prediction)
 	plt.show()
 
@@ -254,7 +307,7 @@ def main():
 
 	print ("Lasso Regression:")
 
-	clf = Lasso(alpha=1.0)
+	clf = Lasso(alpha=0.5)
 	clf.fit(X_train,y_train)
 	confidence = clf.score(X_test, y_test)
 
@@ -264,7 +317,13 @@ def main():
 
 	print(prediction)
 	#pyplot.scatter(X_test, y_test)
-	plt.scatter(X_test[:,1],prediction)
+	plt.scatter(X_test[:,9],prediction)
+
+	rms = sqrt(mean_squared_error(y_test, prediction))
+	print ("rms")
+	print (rms)
+
+	
 	#plt.plot(X_test,prediction)
 	plt.show()
 	plt.plot(y_test)
@@ -273,5 +332,5 @@ def main():
 	plt.savefig('lasso_regression.png')
 	plt.show()
 
-#if __name__=="__main__":
-	#stock()
+if __name__=="__main__":
+	stock()
